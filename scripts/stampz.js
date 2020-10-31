@@ -1,12 +1,12 @@
 //#region Fonts/Symbols
-const fonts = {
+var fonts = {
     // Fonts
     emojiFont: "20px Arial",
     stampFont: "64px Garamond",
     clearButtonFont: "24px Arial"
 };
 // Symbols
-const symbols = {
+var symbols = {
     symbolOne: "😎",
     symbolTwo: "⚡",
     symbolThree: "🐾",
@@ -14,16 +14,16 @@ const symbols = {
 };
 //#endregion Fonts/Symbols
 //#region variables
-let canvas;
-let context;
-let inked;
-let inkAlpha = 1;
-let currentStamp = "";
+var canvas;
+var context;
+var inked;
+var inkAlpha = 1;
+var currentStamp = "";
 //#endregion variables
-const debug = true;
+var debug = true;
 //#region utility
 function concat(s1, s2, s3) {
-    return `${s1}${s2}${s3}`;
+    return "" + s1 + s2 + s3;
 }
 //#endregion utility
 //#region DOM
@@ -54,7 +54,7 @@ function newStamp(front1, front2, front3, back) {
 }
 //#endregion
 //#region stamp set
-const stamps = [
+var stamps = [
     newStamp(symbols.symbolThree, symbols.symbolThree, symbols.symbolThree, "f"),
     newStamp(symbols.symbolThree, symbols.symbolFour, symbols.symbolThree, "?"),
     newStamp(symbols.symbolThree, symbols.symbolTwo, symbols.symbolThree, "y"),
@@ -84,31 +84,31 @@ const stamps = [
     newStamp(symbols.symbolOne, symbols.symbolTwo, symbols.symbolTwo, "e"),
     newStamp(symbols.symbolOne, symbols.symbolOne, symbols.symbolTwo, "o"),
 ];
-let stampSize = { width: 100, height: 60 };
-const numColumns = 4;
-let stampsGrid = [];
-let stampSetXOffset;
+var stampSize = { width: 100, height: 60 };
+var numColumns = 4;
+var stampsGrid = [];
+var stampSetXOffset;
 function drawStampSet() {
     stampSetXOffset = context.canvas.width - (numColumns * stampSize.width);
-    for (let i = 0; i < stamps.length; i++) {
-        const col = (i % numColumns);
-        const x = col * stampSize.width + stampSetXOffset;
-        const row = Math.floor(i / numColumns);
-        const y = row * stampSize.height;
+    for (var i = 0; i < stamps.length; i++) {
+        var col = (i % numColumns);
+        var x = col * stampSize.width + stampSetXOffset;
+        var row = Math.floor(i / numColumns);
+        var y = row * stampSize.height;
         context.strokeRect(x, y, stampSize.width, stampSize.height);
-        const stamp = stamps[i];
+        var stamp = stamps[i];
         if (!stampsGrid[col]) {
             stampsGrid[col] = [];
         }
         stampsGrid[col][row] = stamp.back.toUpperCase();
-        context.fillText(`${stamp.front}${debug ? stamp.back : ""}`, x + (stampSize.width / 2), y + (stampSize.height * 0.6), stampSize.width - 10);
+        context.fillText("" + stamp.front + (debug ? stamp.back : ""), x + (stampSize.width / 2), y + (stampSize.height * 0.6), stampSize.width - 10);
     }
-    const inkpadY = stampSize.height * stampsGrid[0].length;
+    var inkpadY = stampSize.height * stampsGrid[0].length;
     context.fillRect(stampSetXOffset, inkpadY, context.canvas.width - stampSetXOffset, context.canvas.height - inkpadY);
 }
 //#endregion stamp set
 //#region clear button
-const clearButtonSize = { width: 100, height: 50 };
+var clearButtonSize = { width: 100, height: 50 };
 function drawClearButton() {
     context.font = fonts.clearButtonFont;
     context.strokeRect(0, 0, clearButtonSize.width, clearButtonSize.height);
@@ -124,12 +124,12 @@ function clear() {
 //#endregion clear button
 //#region click handling
 function canvasClicked(event) {
-    const x = event.clientX;
-    const y = event.clientY;
+    var x = event.clientX;
+    var y = event.clientY;
     if (x > stampSetXOffset) {
-        const localX = x - stampSetXOffset;
-        const col = Math.floor(localX / stampSize.width);
-        const row = Math.floor(y / stampSize.height);
+        var localX = x - stampSetXOffset;
+        var col = Math.floor(localX / stampSize.width);
+        var row = Math.floor(y / stampSize.height);
         if (row < stampsGrid[col].length) {
             currentStamp = stampsGrid[col][row];
             inked = false;
@@ -148,10 +148,21 @@ function canvasClicked(event) {
             clear();
         }
         else {
-            context.font = fonts.stampFont;
-            context.fillText(currentStamp, x, y);
-            inkAlpha = inkAlpha / 2;
-            context.globalAlpha = inkAlpha;
+            if (currentStamp === "") {
+                // No stamp
+                alert("u need a stamp");
+            }
+            else if (!inked || inkAlpha < .02) {
+                // No ink
+                alert("u need ink");
+            }
+            else {
+                // Successfully stamping
+                context.font = fonts.stampFont;
+                context.fillText(currentStamp, x, y);
+                inkAlpha = inkAlpha / 2;
+                context.globalAlpha = inkAlpha;
+            }
         }
     }
 }

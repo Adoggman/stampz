@@ -192,11 +192,22 @@ function canvasClicked(event: MouseEvent): void {
       clear();
     }
     else {
-      context.font = fonts.stampFont;
 
-      context.fillText(currentStamp, x, y);
-      inkAlpha = inkAlpha / 2;
-      context.globalAlpha = inkAlpha;
+      if (currentStamp === "") {
+        // No stamp
+        alert("u need a stamp");
+      } else if (!inked || inkAlpha < .02) {
+        // No ink
+        alert("u need ink");
+      }
+      else {
+        // Successfully stamping
+        context.font = fonts.stampFont;
+
+        context.fillText(currentStamp, x, y);
+        inkAlpha = inkAlpha / 2;
+        context.globalAlpha = inkAlpha;
+      }
     }
 
   }
