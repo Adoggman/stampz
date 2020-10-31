@@ -1,4 +1,21 @@
 
+//#region Fonts/Symbols
+const fonts = {
+    // Fonts
+    emojiFont: "20px Arial",
+    stampFont: "64px Garamond",
+    clearButtonFont: "24px Arial"
+  }
+
+// Symbols
+const symbols = {
+    symbolOne: "😎", // Smiley
+    symbolTwo: "⚡", // Lightning
+    symbolThree: "🐾", // Pawprints
+    symbolFour: "⭐" // Star
+  }
+//#endregion Fonts/Symbols
+
 //#region variables
 let canvas: HTMLCanvasElement;
 let context: CanvasRenderingContext2D;
@@ -8,29 +25,9 @@ let inkAlpha: number = 1;
 let currentStamp: string = "";
 //#endregion variables
 
-const emojiFontSize = "20px";
-const clearButtonFontSize = "24px";
-const stampFontSize = "64px";
-const font = "Garamond";
-
 const debug = true;
 
-//#region symbols
-
-let smiley = "😎";
-let lightning = "⚡";
-let pawprint = "🐾";
-let star = "⭐";
-
-let symbols: string[] = [smiley, lightning, pawprint, star];
-
-//#endregion symbols
-
 //#region utility
-// function randomInt(min: number, max: number): number {
-//   return Math.floor(Math.random() * (max - min + 1)) + min;
-// }
-
 function concat(s1: string, s2: string, s3: string): string {
   return `${s1}${s2}${s3}`;
 }
@@ -52,7 +49,7 @@ function addListeners(canvas: HTMLCanvasElement): void {
 //#region context prep
 
 function prepareContext(): void {
-  context.font = `${emojiFontSize} ${font}`;
+  context.font = fonts.emojiFont;
   context.textAlign = "center";
 
   context.lineCap = 'round';
@@ -61,26 +58,20 @@ function prepareContext(): void {
   context.lineWidth = 1;
 
   context.fillStyle = 'black';
-
-  //  Example line drawing:
-  //   context.beginPath();
-  //   context.moveTo(200,200);
-  //   context.lineTo(500,500);
-  //   context.stroke();
-  //   context.closePath();
 }
 
 //#endregion context prep
 
 //#region stamp
+
 interface stamp {
   front: string;
   back: string;
 }
 
-function newStamp(s1: string, s2: string, s3: string, back: string): stamp {
+function newStamp(front1: string, front2: string, front3: string, back: string): stamp {
   return {
-    front: concat(s1, s2, s3),
+    front: concat(front1, front2, front3),
     back: back
   };
 }
@@ -90,40 +81,40 @@ function newStamp(s1: string, s2: string, s3: string, back: string): stamp {
 //#region stamp set
 
 const stamps: stamp[] = [
-  newStamp(pawprint, pawprint, pawprint,"f"),
-  newStamp(pawprint, star, pawprint,"?"),
-  newStamp(pawprint, lightning, pawprint,"y"),
-  newStamp(pawprint, smiley, pawprint,"c"),
+  newStamp(symbols.symbolThree, symbols.symbolThree, symbols.symbolThree,"f"),
+  newStamp(symbols.symbolThree, symbols.symbolFour, symbols.symbolThree,"?"),
+  newStamp(symbols.symbolThree, symbols.symbolTwo, symbols.symbolThree,"y"),
+  newStamp(symbols.symbolThree, symbols.symbolOne, symbols.symbolThree,"c"),
 
-  newStamp(pawprint, pawprint, smiley,"q"),
-  newStamp(pawprint, star, smiley,"u"),
-  newStamp(pawprint, lightning, smiley,"!"),
-  newStamp(pawprint, smiley, smiley,"w"),
+  newStamp(symbols.symbolThree, symbols.symbolThree, symbols.symbolOne,"q"),
+  newStamp(symbols.symbolThree, symbols.symbolFour, symbols.symbolOne,"u"),
+  newStamp(symbols.symbolThree, symbols.symbolTwo, symbols.symbolOne,"!"),
+  newStamp(symbols.symbolThree, symbols.symbolOne, symbols.symbolOne,"w"),
 
-  newStamp(star, pawprint, star,"l"),
-  newStamp(star, star, star,"p"),
-  newStamp(star, lightning, star,"h"),
-  newStamp(star, smiley, star,"r"),
+  newStamp(symbols.symbolFour, symbols.symbolThree, symbols.symbolFour,"l"),
+  newStamp(symbols.symbolFour, symbols.symbolFour, symbols.symbolFour,"p"),
+  newStamp(symbols.symbolFour, symbols.symbolTwo, symbols.symbolFour,"h"),
+  newStamp(symbols.symbolFour, symbols.symbolOne, symbols.symbolFour,"r"),
 
-  newStamp(lightning, pawprint, pawprint,"i"),
-  newStamp(lightning, star, pawprint,"x"),
-  newStamp(lightning, lightning, pawprint,"n"),
-  newStamp(lightning, smiley, pawprint,"s"),
+  newStamp(symbols.symbolTwo, symbols.symbolThree, symbols.symbolThree,"i"),
+  newStamp(symbols.symbolTwo, symbols.symbolFour, symbols.symbolThree,"x"),
+  newStamp(symbols.symbolTwo, symbols.symbolTwo, symbols.symbolThree,"n"),
+  newStamp(symbols.symbolTwo, symbols.symbolOne, symbols.symbolThree,"s"),
 
-  newStamp(lightning, pawprint, smiley,"m"),
-  newStamp(lightning, star, smiley,"t"),
-  newStamp(lightning, lightning, smiley,"k"),
-  newStamp(lightning, smiley, smiley,"z"),
+  newStamp(symbols.symbolTwo, symbols.symbolThree, symbols.symbolOne,"m"),
+  newStamp(symbols.symbolTwo, symbols.symbolFour, symbols.symbolOne,"t"),
+  newStamp(symbols.symbolTwo, symbols.symbolTwo, symbols.symbolOne,"k"),
+  newStamp(symbols.symbolTwo, symbols.symbolOne, symbols.symbolOne,"z"),
 
-  newStamp(smiley, pawprint, star,"v"),
-  newStamp(smiley, star, star,"a"),
-  newStamp(smiley, lightning, star,"d"),
-  newStamp(smiley, smiley, star,"g"),
+  newStamp(symbols.symbolOne, symbols.symbolThree, symbols.symbolFour,"v"),
+  newStamp(symbols.symbolOne, symbols.symbolFour, symbols.symbolFour,"a"),
+  newStamp(symbols.symbolOne, symbols.symbolTwo, symbols.symbolFour,"d"),
+  newStamp(symbols.symbolOne, symbols.symbolOne, symbols.symbolFour,"g"),
 
-  newStamp(smiley, pawprint, lightning,"j"),
-  newStamp(smiley, star, lightning,"b"),
-  newStamp(smiley, lightning, lightning,"e"),
-  newStamp(smiley, smiley, lightning,"o"),
+  newStamp(symbols.symbolOne, symbols.symbolThree, symbols.symbolTwo,"j"),
+  newStamp(symbols.symbolOne, symbols.symbolFour, symbols.symbolTwo,"b"),
+  newStamp(symbols.symbolOne, symbols.symbolTwo, symbols.symbolTwo,"e"),
+  newStamp(symbols.symbolOne, symbols.symbolOne, symbols.symbolTwo,"o"),
 ];
 
 let stampSize = {width: 100, height: 60};
@@ -159,8 +150,7 @@ function drawStampSet(): void {
 const clearButtonSize = {width: 100, height: 50};
 
 function drawClearButton(): void {
-
-  context.font = `${clearButtonFontSize} ${font}`;
+  context.font = fonts.clearButtonFont;
   context.strokeRect(0, 0, clearButtonSize.width, clearButtonSize.height);
   context.fillText("clear", clearButtonSize.width / 2, clearButtonSize.height * 0.7, 100);
 }
@@ -202,7 +192,7 @@ function canvasClicked(event: MouseEvent): void {
       clear();
     }
     else {
-      context.font = `${stampFontSize} ${font}`;
+      context.font = fonts.stampFont;
 
       context.fillText(currentStamp, x, y);
       inkAlpha = inkAlpha / 2;
