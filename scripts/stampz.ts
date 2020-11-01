@@ -25,7 +25,7 @@ let inkAlpha: number = 1;
 let currentStamp: string = "";
 //#endregion variables
 
-const debug = true;
+let debug = false;
 
 //#region utility
 function concat(s1: string, s2: string, s3: string): string {
@@ -43,7 +43,9 @@ function getCanvas(): HTMLCanvasElement {
 //#region listeners
 function addListeners(canvas: HTMLCanvasElement): void {
   canvas.addEventListener("click", canvasClicked);
+  window.addEventListener("keydown", keyPressed);
 }
+
 //#endregion
 
 //#region context prep
@@ -117,6 +119,16 @@ const stamps: stamp[] = [
   newStamp(symbols.symbolOne, symbols.symbolOne, symbols.symbolTwo,"o"),
 ];
 
+const encodingHash: Map<string,string> = new Map<string, string>();
+function populateEncodingHash(): void {
+  for (let i = 0; i < stamps.length; i++) {
+    const stamp: stamp = stamps[i];
+    encodingHash.set(stamp.back, stamp.front);
+  }
+}
+populateEncodingHash();
+
+
 let stampSize = {width: 100, height: 60};
 const numColumns = 4;
 let stampsGrid: string[][] = [];
@@ -155,7 +167,7 @@ function drawClearButton(): void {
   context.fillText("clear", clearButtonSize.width / 2, clearButtonSize.height * 0.7, 100);
 }
 
-function clear(): void {
+function clearPad(): void {
   inked = false;
   context.globalAlpha = 1;
   inkAlpha = 1;
@@ -164,7 +176,22 @@ function clear(): void {
 }
 //#endregion clear button
 
-//#region click handling
+//#region event handling
+function keyPressed(event: KeyboardEvent): void {
+  if (event.key === "d") {
+    debug = !debug;
+    clearAll();
+    drawAll();
+  } else if (event.keyCode === 8) {
+    clearPad();
+  } else if (event.key === "e") {
+    const message = prompt("Enter a message to encode");
+    const encodedMessage = encode(message);
+    drawEncodedMessage(encodedMessage);
+  }
+
+}
+
 function canvasClicked(event: MouseEvent): void {
   const x = event.clientX;
   const y = event.clientY;
@@ -189,16 +216,16 @@ function canvasClicked(event: MouseEvent): void {
   {
     if (x < clearButtonSize.width && y < clearButtonSize.height) {
       console.log("clear");
-      clear();
+      clearPad();
     }
     else {
 
       if (currentStamp === "") {
         // No stamp
-        alert("u need a stamp");
+        if (debug) alert("u need a stamp");
       } else if (!inked || inkAlpha < .02) {
         // No ink
-        alert("u need ink");
+        if (debug) alert("u need ink");
       }
       else {
         // Successfully stamping
@@ -214,17 +241,48 @@ function canvasClicked(event: MouseEvent): void {
 
 }
 
-//#endregion click handling
+//#endregion event handling
+
+//#region drawing and clearing
+function clearAll(): void {
+  context.clearRect(0,0, canvas.clientWidth, canvas.clientHeight);
+}
+
+function drawAll(): void {
+  prepareContext();
+  drawStampSet();
+  drawClearButton();
+}
+
+function drawEncodedMessage(messages: string[]): void {
+  clearPad();
+  let currentX = 150;
+  for (let i = 0; i < messages.length; i++) {
+    context.fillText(messages[i], currentX, 200, 90);
+    context.strokeRect(currentX-50,170,100,50);
+    context.strokeRect(currentX-50,220,100,100);
+    currentX = currentX + 100;
+  }
+}
+//#endregion
+
+function encode(message: string): string[] {
+  let encodedMessage: string[] = [];
+
+  for (let i = 0; i < message.length; i++) {
+    const letter = message.charAt(i);
+    encodedMessage[i] = encodingHash.get(letter);
+  }
+
+  return encodedMessage;
+}
 
 function main(): void {
-
   canvas = getCanvas();
   addListeners(canvas);
 
   context = canvas.getContext("2d");
-  prepareContext();
-  drawStampSet();
-  drawClearButton();
+  drawAll();
 }
 
 main();
