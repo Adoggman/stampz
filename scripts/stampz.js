@@ -145,6 +145,7 @@ function keyPressed(event) {
         var message = prompt("Enter a message to encode");
         var encodedMessage = encode(message);
         drawEncodedMessage(encodedMessage);
+        alert(window.location.hostname + window.location.pathname + "?word=" + atob(message));
     }
 }
 function canvasClicked(event) {
@@ -206,6 +207,10 @@ function drawEncodedMessage(messages) {
     clearPad();
     var currentX = 150;
     for (var i = 0; i < messages.length; i++) {
+        // Handle characters that were not encoded
+        if (!messages[i]) {
+            continue;
+        }
         context.fillText(messages[i], currentX, 200, 90);
         context.strokeRect(currentX - 50, 170, 100, 50);
         context.strokeRect(currentX - 50, 220, 100, 100);
@@ -226,6 +231,15 @@ function main() {
     addListeners(canvas);
     context = canvas.getContext("2d");
     drawAll();
+    var urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has("word")) {
+        var encodedWord = urlParams.get("word");
+        var word = atob(encodedWord);
+        if (word) {
+            var encodedMessage = encode(word);
+            drawEncodedMessage(encodedMessage);
+        }
+    }
 }
 main();
 //# sourceMappingURL=stampz.js.map

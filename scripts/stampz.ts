@@ -1,4 +1,3 @@
-
 //#region Fonts/Symbols
 const fonts = {
     // Fonts
@@ -188,6 +187,7 @@ function keyPressed(event: KeyboardEvent): void {
     const message = prompt("Enter a message to encode");
     const encodedMessage = encode(message);
     drawEncodedMessage(encodedMessage);
+    alert(window.location.hostname + window.location.pathname + "?word=" + atob(message));
   }
 
 }
@@ -258,6 +258,12 @@ function drawEncodedMessage(messages: string[]): void {
   clearPad();
   let currentX = 150;
   for (let i = 0; i < messages.length; i++) {
+
+    // Handle characters that were not encoded
+    if (!messages[i]) {
+      continue;
+    }
+
     context.fillText(messages[i], currentX, 200, 90);
     context.strokeRect(currentX-50,170,100,50);
     context.strokeRect(currentX-50,220,100,100);
@@ -283,6 +289,16 @@ function main(): void {
 
   context = canvas.getContext("2d");
   drawAll();
+
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.has("word")) {
+    const encodedWord = urlParams.get("word");
+    const word = atob(encodedWord);
+    if (word) {
+      const encodedMessage = encode(word);
+      drawEncodedMessage(encodedMessage);
+    }
+  }
 }
 
 main();
