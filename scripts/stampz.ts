@@ -132,9 +132,11 @@ let stampSize = {width: 100, height: 60};
 const numColumns = 4;
 let stampsGrid: string[][] = [];
 let stampSetXOffset: number;
+let stampSetWidth: number;
 
 function drawStampSet(): void {
-  stampSetXOffset = context.canvas.width - (numColumns * stampSize.width);
+  stampSetWidth = (numColumns * stampSize.width)
+  stampSetXOffset = context.canvas.width - stampSetWidth;
 
   for (let i = 0; i < stamps.length; i++) {
     const col = (i % numColumns);
@@ -153,6 +155,9 @@ function drawStampSet(): void {
 
   const inkpadY = stampSize.height * stampsGrid[0].length
   context.fillRect(stampSetXOffset, inkpadY, context.canvas.width - stampSetXOffset, context.canvas.height - inkpadY);
+  context.fillStyle = "white";
+  context.fillText("inkpad", stampSetXOffset + (stampSetWidth/2), inkpadY + 20, stampSetWidth);
+  context.fillStyle = "black";
 }
 
 //#endregion stamp set
@@ -229,7 +234,7 @@ function canvasClicked(event: MouseEvent): void {
         if (debug) alert("u need a stamp");
       } else if (!inked || inkAlpha < .02) {
         // No ink
-        if (debug) alert("u need ink");
+        alert("Click the inkpad to use the stamp");
       }
       else {
         // Successfully stamping

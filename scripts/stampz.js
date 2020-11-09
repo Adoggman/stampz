@@ -97,8 +97,10 @@ var stampSize = { width: 100, height: 60 };
 var numColumns = 4;
 var stampsGrid = [];
 var stampSetXOffset;
+var stampSetWidth;
 function drawStampSet() {
-    stampSetXOffset = context.canvas.width - (numColumns * stampSize.width);
+    stampSetWidth = (numColumns * stampSize.width);
+    stampSetXOffset = context.canvas.width - stampSetWidth;
     for (var i = 0; i < stamps.length; i++) {
         var col = (i % numColumns);
         var x = col * stampSize.width + stampSetXOffset;
@@ -114,6 +116,9 @@ function drawStampSet() {
     }
     var inkpadY = stampSize.height * stampsGrid[0].length;
     context.fillRect(stampSetXOffset, inkpadY, context.canvas.width - stampSetXOffset, context.canvas.height - inkpadY);
+    context.fillStyle = "white";
+    context.fillText("inkpad", stampSetXOffset + (stampSetWidth / 2), inkpadY + 20, stampSetWidth);
+    context.fillStyle = "black";
 }
 //#endregion stamp set
 //#region clear button
@@ -183,8 +188,7 @@ function canvasClicked(event) {
             }
             else if (!inked || inkAlpha < .02) {
                 // No ink
-                if (debug)
-                    alert("u need ink");
+                alert("Click the inkpad to use the stamp");
             }
             else {
                 // Successfully stamping

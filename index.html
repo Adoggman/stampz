@@ -22,10 +22,23 @@
   <meta name="theme-color" content="#fafafa">
 </head>
 
-<body>
+<body style="font-family:Arial;">
 
   <!-- Add your site or application content here -->
-  <canvas id="canvas" width="1200" height="800" style="border: 1px solid black;" />
+  <div style="display: flex;">
+    <canvas id="canvas" width="1200" height="800" style="border: 1px solid black;" ></canvas>
+    <span style="padding:10px;">
+      To decode the message:
+    <ol>
+      <li>Starting with the first three symbols, click the matching set of three symbols in the grid on the right</li>
+      <li>Click the inkpad</li>
+      <li>Click in the box under the first three symbols in the message</li>
+      <li>Repeat until message is decoded</li>
+    </ol>
+  </span>
+  </div>
+
+
   <script src="scripts/stampz.js"></script>
 
 </body>
