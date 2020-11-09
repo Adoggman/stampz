@@ -185,7 +185,7 @@ function canvasClicked(event) {
             else {
                 // Successfully stamping
                 context.font = fonts.stampFont;
-                context.fillText(currentStamp, x, y);
+                context.fillText(currentStamp, x, y + 20);
                 inkAlpha = inkAlpha / 2;
                 context.globalAlpha = inkAlpha;
             }
