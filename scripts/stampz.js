@@ -146,10 +146,9 @@ function keyPressed(event) {
         var encodedMessage = encode(message);
         drawEncodedMessage(encodedMessage);
         var urlParams = new URLSearchParams(window.location.search);
-        urlParams.set("word", encodeURIComponent(atob(message)));
+        urlParams.set("word", encodeURIComponent(btoa(message)));
         var location_1 = window.location;
         location_1.search = urlParams.toString();
-        alert(location_1.href);
     }
 }
 function canvasClicked(event) {
@@ -238,7 +237,9 @@ function main() {
     var urlParams = new URLSearchParams(window.location.search);
     if (urlParams.has("word")) {
         var encodedWord = urlParams.get("word");
-        var word = decodeURIComponent(atob(encodedWord));
+        console.log(encodedWord);
+        console.log(decodeURIComponent(encodedWord));
+        var word = atob(decodeURIComponent(encodedWord));
         if (word) {
             var encodedMessage = encode(word);
             drawEncodedMessage(encodedMessage);
