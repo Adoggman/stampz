@@ -8,9 +8,9 @@ var fonts = {
 // Symbols
 var symbols = {
     symbolOne: "😎",
-    symbolTwo: "⚡",
-    symbolThree: "🐾",
-    symbolFour: "⭐" // Star
+    symbolTwo: "🍀",
+    symbolThree: "💧",
+    symbolFour: "❤️" // Star
 };
 //#endregion Fonts/Symbols
 //#region variables

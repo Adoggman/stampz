@@ -10,9 +10,9 @@ const fonts = {
 // Symbols
 const symbols = {
     symbolOne: "😎", // Smiley
-    symbolTwo: "⚡", // Lightning
-    symbolThree: "🐾", // Pawprints
-    symbolFour: "⭐" // Star
+    symbolTwo: "🍀", // Lightning
+    symbolThree: "💧", // Pawprints
+    symbolFour: "❤️" // Star
   }
 //#endregion Fonts/Symbols
 
