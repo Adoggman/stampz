@@ -187,7 +187,12 @@ function keyPressed(event: KeyboardEvent): void {
     const message = prompt("Enter a message to encode");
     const encodedMessage = encode(message);
     drawEncodedMessage(encodedMessage);
-    alert(window.location.hostname + window.location.pathname + "?word=" + atob(message));
+
+    const urlParams = new URLSearchParams(window.location.search);
+    urlParams.set("word", encodeURIComponent(atob(message)));
+    const location = window.location;
+    location.search = urlParams.toString();
+    alert(location.href);
   }
 
 }
@@ -293,7 +298,7 @@ function main(): void {
   const urlParams = new URLSearchParams(window.location.search);
   if (urlParams.has("word")) {
     const encodedWord = urlParams.get("word");
-    const word = atob(encodedWord);
+    const word = decodeURIComponent(atob(encodedWord));
     if (word) {
       const encodedMessage = encode(word);
       drawEncodedMessage(encodedMessage);

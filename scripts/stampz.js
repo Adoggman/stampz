@@ -145,7 +145,11 @@ function keyPressed(event) {
         var message = prompt("Enter a message to encode");
         var encodedMessage = encode(message);
         drawEncodedMessage(encodedMessage);
-        alert(window.location.hostname + window.location.pathname + "?word=" + atob(message));
+        var urlParams = new URLSearchParams(window.location.search);
+        urlParams.set("word", encodeURIComponent(atob(message)));
+        var location_1 = window.location;
+        location_1.search = urlParams.toString();
+        alert(location_1.href);
     }
 }
 function canvasClicked(event) {
@@ -234,7 +238,7 @@ function main() {
     var urlParams = new URLSearchParams(window.location.search);
     if (urlParams.has("word")) {
         var encodedWord = urlParams.get("word");
-        var word = atob(encodedWord);
+        var word = decodeURIComponent(atob(encodedWord));
         if (word) {
             var encodedMessage = encode(word);
             drawEncodedMessage(encodedMessage);
